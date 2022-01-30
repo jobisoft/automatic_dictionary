@@ -2,13 +2,6 @@
 //A component can be shutten down unregistering from what had done
 export const Shutdownable = {
   shutdown_chain: [],
-  //Registers and queues unregistering
-  setListener: function (target, on, func, useCapture) {
-    target.addEventListener(on, func, useCapture);
-    this.shutdown_chain.push(function () {
-      target.removeEventListener(on, func, useCapture);
-    });
-  },
   addListener: function (target, func) {
     target.addListener(func);
     this.shutdown_chain.push(function () {
