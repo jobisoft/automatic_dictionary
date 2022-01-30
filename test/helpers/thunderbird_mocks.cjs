@@ -15,22 +15,6 @@ let window = {
 document.documentElement = document;
 
 var pref_data = {};
-var _get = async function (k, fallback) {
-    k = k.toString();
-    var v = pref_data[k];
-    if (typeof (v) == "undefined") {
-        if (typeof (fallback) == "undefined") {
-            throw "Undefined key " + k + " in store"
-        }
-        v = fallback;
-    }
-    return v;
-};
-var _set = async function (k, v) {
-    k = k.toString();
-    pref_data[k] = v;
-};
-
 local_storage = {
     get: async function (k, fallback) {
         k = k.toString();
