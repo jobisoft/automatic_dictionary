@@ -31,17 +31,6 @@ var _set = async function (k, v) {
     pref_data[k] = v;
 };
 
-let prefs = {
-    addObserver: function () { },
-    removeObserver: function () { },
-    getCharPref: _get,
-    getIntPref: _get,
-    setCharPref: _set,
-    setIntPref: _set,
-    getBoolPref: _get,
-    setBoolPref: _set
-};
-
 local_storage = {
     get: async function (k, fallback) {
         k = k.toString();
@@ -65,7 +54,6 @@ let browser = {
         }
     },
     contacts: { get: function () { } },
-    prefs: prefs,
     storage: { local: local_storage },
     i18n: {
         getMessage: function (key) { return key }
