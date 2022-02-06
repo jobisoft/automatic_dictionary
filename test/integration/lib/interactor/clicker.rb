@@ -6,8 +6,18 @@ module Interactor
       include Shared
 
       def click_on(position)
-        run("xdotool mousemove --sync #{position.first} #{position.last} click --clearmodifiers 1")
+        delta = Benchmark.realtime do
+          run("xdotool mousemove --sync #{position.first} #{position.last} click --clearmodifiers 1")
+        end
+        somethings_wrong if delta > 1
         sleep 1
+      end
+
+      def somethings_wrong
+        puts "Click was too slow"
+        system('top -n 1')
+        sleep 10
+        system('top -n 1')
       end
     end
   end
