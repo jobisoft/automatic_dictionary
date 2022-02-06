@@ -149,7 +149,7 @@ describe "AutomaticDictionary integration tests" do
       interactor.click_on_position([events_position.first - 50, events_position.last])
       interactor.click_on_text('Automatic Dictionary added')
     end
-    interactor.wait_for_text('Enable')
+    sleep 1
     interactor.hit_key('Alt+e')
   end
 
