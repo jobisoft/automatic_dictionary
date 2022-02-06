@@ -30,6 +30,9 @@ workflows:
           name: "latest thunderbird"
           version: "latest"
       - integration-tests:
+          name: "thunderbird beta 96 (known to work)"
+          version: "96.0b4"
+      - integration-tests:
           name: "latest thunderbird beta"
           version: "beta-latest"
   weekly:
