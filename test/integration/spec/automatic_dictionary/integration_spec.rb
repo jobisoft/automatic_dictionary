@@ -114,9 +114,10 @@ describe "AutomaticDictionary integration tests" do
     install_extension('automatic_dictionary.xpi', profile_path)
 
     log_thunderbird_version
-    run("thunderbird --profile #{profile_path} --no-remote &")
+    run("strace -f -t -o strace-#{Time.now.to_s.gsub(/[^\d]/,'')}.log thunderbird --profile #{profile_path} --no-remote &")
+    #run("thunderbird --profile #{profile_path} --no-remote &")
 
-    sleep 5
+    sleep 15
 
     interactor.click_on_text('Could not connect to', optional: true)
     enable_extension_in_thunderbird
@@ -143,14 +144,30 @@ describe "AutomaticDictionary integration tests" do
     # menu does not open. Based on circleci logs, a simple operation like
     # click can last up to 15s. Maybe it does not have the same CPU available
     # all the time.
-    rescue_and_retry(3) do
+    rescue_and_retry(0) do
       events_position = interactor.wait_for_text('Events', filter: right_side_of_screen_filter)
       # Click 50 pixels on the left of Events label.
       interactor.click_on_position([events_position.first - 50, events_position.last])
+      error_if_not_high_cpu
       interactor.click_on_text('Automatic Dictionary added')
     end
     sleep 1
     interactor.hit_key('Alt+e')
+  end
+
+  def error_if_not_high_cpu
+    system('top -n 1')
+    sleep 5
+    system('top -bn1')
+    cpu = `ps -eo pcpu |sort |grep -v CPU | tail -n 1`.strip
+    cpu = cpu.to_f
+    puts "##### CPU IS #{cpu}"
+    if cpu < 50
+      puts "ERROR: CPU IS TOO LOW"
+      sleep 5
+      exit 22
+    end
+    require 'byebug'; byebug; 2+2
   end
 
   def right_side_of_screen_filter
@@ -161,7 +178,7 @@ describe "AutomaticDictionary integration tests" do
 
   after do |example|
     if example.exception != nil
-      if ENV['LOCAL_DEBUG'] == "1"
+      if ENV['LOCAL_DEBUG'] == "1" && example.exception.is_a?(StandardError)
         puts example.exception
         require 'byebug'
         byebug

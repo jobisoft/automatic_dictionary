@@ -16,7 +16,7 @@ module Interactor
       def somethings_wrong
         puts "Click was too slow"
         system('top -n 1')
-        sleep 10
+        sleep 3600
         system('top -n 1')
       end
     end
