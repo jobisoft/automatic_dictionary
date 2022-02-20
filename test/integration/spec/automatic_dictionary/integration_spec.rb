@@ -162,12 +162,6 @@ describe "AutomaticDictionary integration tests" do
     cpu = `ps -eo pcpu |sort |grep -v CPU | tail -n 1`.strip
     cpu = cpu.to_f
     puts "##### CPU IS #{cpu}"
-    if cpu < 50
-      puts "ERROR: CPU IS TOO LOW"
-      sleep 5
-      exit 22
-    end
-    require 'byebug'; byebug; 2+2
   end
 
   def right_side_of_screen_filter
